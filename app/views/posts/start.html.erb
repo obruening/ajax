@@ -1,0 +1,240 @@
+<script id="errorsTemplate" type="text/html">
+  <li>
+    <b><span data-bind="text: $data"/></b>
+  </li>
+</script>
+
+<script id="indexTemplate" type="text/html">
+  <tr>
+    <td data-bind="text: title"></td>
+    <td data-bind="text: body"></td>
+    <td>
+      <a data-bind="click: function() { viewModel.showAction($data) }">Show</a>
+    </td>
+    <td>
+      <a data-bind="click: function() { viewModel.editAction($data) }">Edit</a>
+    </td>
+    <td>
+      <a data-bind="click: function() { viewModel.destroyAction($data) }">Delete</a>
+    </td>
+  </tr>
+</script>
+
+<script id="showTemplate" type="text/html">
+  <p>
+    <b>Title</b><br/>
+    <span data-bind="text: title"></span>
+  </p>
+  <p>
+    <b>Body</b><br/>
+    <span data-bind="text: body"></span>
+  </p>
+  <p>
+    <a data-bind="click: function() { viewModel.indexAction() }">Back</a>
+    <a data-bind="click: function() { viewModel.editAction($data) }">Edit</a>
+  </p>
+</script>
+
+
+<script id="editTemplate" type="text/html">
+  <form id="form">
+    <div class="field">
+      <label for="post_title">Title</label><br />
+      <input id="post_title" data-bind="value: title" />
+
+    </div>
+    <div class="field">
+      <label for="post_body">Body</label><br />
+      <input id="post_body" data-bind="value: body" />
+    </div>
+  </form>
+  <div>
+    <button data-bind="click: function() { viewModel.updateAction($data) }">Save</button>
+    <a data-bind="click: function() { viewModel.showAction($item.selectedItem()) }">Cancel</a>
+  </div>
+</script>
+
+<script id="newTemplate" type="text/html">
+  <form id="form">
+    <div class="field">
+      <label for="post_title">Title</label><br />
+      <input id="post_title" data-bind="value: title" />
+
+    </div>
+    <div class="field">
+      <label for="post_body">Body</label><br />
+      <input id="post_body" data-bind="value: body" />
+    </div>
+  </form>
+  <div>
+    <button data-bind="click: function() { viewModel.createAction($data) }">Create</button>
+    <a data-bind="click: function() { viewModel.indexAction() }">Cancel</a>
+  </div>
+</script>
+
+
+
+<ul data-bind='template: {name: "errorsTemplate", foreach: errors}'></ul>
+<span data-bind='text: flash'></span>
+
+<div data-bind='visible: currentPage() == "index"'>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Body</th>
+        <th></th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody data-bind='template: {name: "indexTemplate", foreach: items}'></tbody>
+  </table>
+  <a data-bind='click: function() { viewModel.newAction() }'>New Post</a><br />
+</div>
+
+<div data-bind='visible: currentPage() == "show"'>
+  <div data-bind='template: {name: "showTemplate", data: selectedItem}'></div>
+</div>
+
+<div data-bind='visible: currentPage() == "edit"'>
+  <div data-bind='template: {name: "editTemplate", data: tempItem, templateOptions: { selectedItem: selectedItem}}'></div>
+</div>
+
+<div data-bind='visible: currentPage() == "new"'>
+  <div data-bind='template: {name: "newTemplate", data: tempItem}'></div>
+</div>
+
+<script type="text/javascript">
+  var viewModel = {
+    flash: ko.observable(),
+    shownOnce: ko.observable(),
+    currentPage: ko.observable(),
+    errors: ko.observableArray(),
+    items: ko.observableArray(),
+    selectedItem: ko.observable(),
+    tempItem: {
+      id: ko.observable(),
+      title: ko.observable(),
+      body: ko.observable(),
+      updated_at: ko.observable(),
+      created_at: ko.observable()
+    },
+
+    setFlash: function(flash) {
+      this.flash(flash);
+      this.shownOnce(false);
+    },
+    checkFlash: function() {
+      if (this.shownOnce() == true) {
+        this.flash('');
+      }
+    },
+    clearTempItem: function() {
+      this.tempItem.id('');
+      this.tempItem.title('');
+      this.tempItem.body('');
+      this.tempItem.updated_at('');
+      this.tempItem.created_at('');
+    },
+    prepareTempItem : function() {
+      this.tempItem.id(ko.utils.unwrapObservable(this.selectedItem().id));
+      this.tempItem.title(ko.utils.unwrapObservable(this.selectedItem().title));
+      this.tempItem.body(ko.utils.unwrapObservable(this.selectedItem().body));
+      this.tempItem.updated_at(ko.utils.unwrapObservable(this.selectedItem().updated_at));
+      this.tempItem.created_at(ko.utils.unwrapObservable(this.selectedItem().created_at));
+    },
+    indexAction: function() {
+      this.checkFlash();
+      $.getJSON('../posts.json', function(data) {
+        viewModel.items(data);
+      });
+      this.currentPage('index');
+      this.shownOnce(true);
+    },
+    showAction: function(itemToShow) {
+      this.checkFlash();
+      viewModel.errors([]);
+      this.selectedItem(itemToShow);
+      this.currentPage('show');
+      this.shownOnce(true);
+    },
+    newAction: function() {
+      this.checkFlash();
+      this.currentPage('new');
+      this.clearTempItem();
+      this.shownOnce(true);
+    },
+    editAction: function(itemToEdit) {
+      this.checkFlash();
+      this.selectedItem(itemToEdit);
+      this.prepareTempItem();
+      this.currentPage('edit');
+      this.shownOnce(true);
+    },
+    createAction: function(itemToCreate) {
+      var json_data = ko.toJS(itemToCreate);
+      $.ajax({
+        type: 'POST',
+        url: '../posts.json',
+        data: {post: json_data},
+        dataType: "json",
+        success: function(createdItem) {
+          viewModel.errors([]);
+          viewModel.setFlash('Post successfully created.');
+          viewModel.clearTempItem();
+          viewModel.showAction(createdItem);
+        },
+        error: function(msg) {
+          viewModel.errors(JSON.parse(msg.responseText));
+        }
+      });
+    },
+    updateAction: function(itemToUpdate) {
+      var json_data = ko.toJS(itemToUpdate);
+      delete json_data.id;
+      delete json_data.created_at;
+      delete json_data.updated_at;
+      
+      $.ajax({
+        type: 'PUT',
+        url: '../posts/' + itemToUpdate.id() + '.json',
+        data: {post: json_data},
+        dataType: "json",
+        success: function(updatedItem) {
+          viewModel.errors([]);
+          viewModel.setFlash('Post successfully updated.');
+          viewModel.showAction(updatedItem);
+        },
+        error: function(msg) {
+          viewModel.errors(JSON.parse(msg.responseText));
+        }
+      });
+    },
+    destroyAction: function(itemToDestroy) {
+      if (confirm('Are you sure?')) {
+        $.ajax({
+          type: "DELETE",
+          url: '../posts/' + itemToDestroy.id + '.json',
+          dataType: "json",
+          success: function(){
+            viewModel.errors([]);
+            viewModel.setFlash('Post successfully deleted.');
+            viewModel.indexAction();
+          },
+          error: function(msg) {
+            viewModel.errors(JSON.parse(msg.responseText));
+          }
+        });
+      }
+    }
+  };
+
+  ko.applyBindings(viewModel);
+
+  $(document).ready(function() {
+    viewModel.indexAction();
+    viewModel.clearTempItem();
+  });
+
+</script>

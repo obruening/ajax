@@ -1,0 +1,21 @@
+<root>
+  <comment id="1">
+    Return all posts as json.
+  </comment>
+  <comment id="2">
+    The show action is not used here. A selected record is pulled from the client-side array.
+  </comment>
+  <comment id="3">
+    After creation, the record is sent back to the browser with its id.
+  </comment>
+  <comment id="4">
+    Validation errors are sent back to the browser.
+    Convert errors to an array, because it is easier to handle this way in the error template.
+  </comment>
+  <comment id="5">
+    The updated record is sent back to the browser.
+  </comment>
+  <comment id="6">
+    Convert status to json and send it back.
+  </comment>
+</root>

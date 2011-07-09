@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rails Knockout Crud Example</title>
+    <link href="/stylesheets/scaffold.css" media="screen" rel="stylesheet" type="text/css" />
+    <script src="/javascripts/jquery.js" type="text/javascript"></script>
+    <script src="/javascripts/jquery.tmpl.js" type="text/javascript"></script>
+    <script src="/javascripts/knockout-1.2.1.js" type="text/javascript"></script>
+    <script src="/javascripts/crud.js" type="text/javascript"></script>
+
+
+  </head>
+  <body>
+    <!-- /// 1 -->
+    <script id="errorsTemplate" type="text/html">
+      <li>
+        <b><span data-bind="text: $data"/></b>
+      </li>
+    </script>
+
+    <!-- /// 2 -->
+    <script id="indexTemplate" type="text/html">
+      <tr>
+        <!-- /// 3 -->
+        <td data-bind="text: title"></td>
+        <td data-bind="text: body"></td>
+        <!-- /// 4 -->
+        <td>
+          <a data-bind="click: function() { viewModel.showAction($data) }">Show</a>
+        </td>
+        <td>
+          <a data-bind="click: function() { viewModel.editAction($data) }">Edit</a>
+        </td>
+        <td>
+          <a data-bind="click: function() { viewModel.destroyAction($data) }">Delete</a>
+        </td>
+      </tr>
+    </script>
+
+    <!-- /// 5 -->
+    <script id="showTemplate" type="text/html">
+      <p>
+        <b>Title</b><br/>
+        <span data-bind="text: title"></span>
+      </p>
+      <p>
+        <b>Body</b><br/>
+        <span data-bind="text: body"></span>
+      </p>
+      <p>
+        <!-- /// 6 -->
+        <a data-bind="click: function() { viewModel.indexAction() }">Back</a>
+        <a data-bind="click: function() { viewModel.editAction($data) }">Edit</a>
+      </p>
+    </script>
+
+    <!-- /// 7 -->
+    <script id="editTemplate" type="text/html">
+      <form id="form">
+        <div class="field">
+          <label for="post_title">Title</label><br />
+          <input id="post_title" data-bind="value: title" />
+
+        </div>
+        <div class="field">
+          <label for="post_body">Body</label><br />
+          <input id="post_body" data-bind="value: body" />
+        </div>
+      </form>
+      <div>
+        <button data-bind="click: function() { viewModel.updateAction($data) }">Save</button>
+        <a data-bind="click: function() { viewModel.showAction($item.selectedItem()) }">Cancel</a>
+      </div>
+    </script>
+
+    <!-- /// 8 -->
+    <script id="newTemplate" type="text/html">
+      <form id="form">
+        <div class="field">
+          <label for="post_title">Title</label><br />
+          <input id="post_title" data-bind="value: title" />
+
+        </div>
+        <div class="field">
+          <label for="post_body">Body</label><br />
+          <input id="post_body" data-bind="value: body" />
+        </div>
+      </form>
+      <div>
+        <button data-bind="click: function() { viewModel.createAction($data) }">Create</button>
+        <a data-bind="click: function() { viewModel.indexAction() }">Cancel</a>
+      </div>
+    </script>
+
+
+    <!-- /// 9 -->
+    <ul data-bind='template: {name: "errorsTemplate", foreach: errors}'></ul>
+    <!-- /// 10 -->
+    <span data-bind='text: flash'></span>
+    <!-- /// 11 -->
+    <div data-bind='visible: currentPage() == "index"'>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Body</th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody data-bind='template: {name: "indexTemplate", foreach: items}'></tbody>
+      </table>
+      <a data-bind='click: function() { viewModel.newAction() }'>New Post</a><br />
+    </div>
+
+    <!-- /// 12 -->
+    <div data-bind='visible: currentPage() == "show"'>
+      <div data-bind='template: {name: "showTemplate", data: selectedItem}'></div>
+    </div>
+
+    <!-- /// 13 -->
+    <div data-bind='visible: currentPage() == "edit"'>
+      <div data-bind='template: {name: "editTemplate", data: tempItem, templateOptions: { selectedItem: selectedItem}}'></div>
+    </div>
+
+    <!-- /// 14 -->
+    <div data-bind='visible: currentPage() == "new"'>
+      <div data-bind='template: {name: "newTemplate", data: tempItem}'></div>
+    </div>
+  </body>
+</html>

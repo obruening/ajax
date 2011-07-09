@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ajax</title>
+    <%= stylesheet_link_tag :all %>
+    <%= javascript_include_tag "jquery" %>
+    <%= javascript_include_tag "jquery.tmpl" %>
+    <%= javascript_include_tag "rails" %>
+    <%= javascript_include_tag "knockout-1.2.1" %>
+    <%= csrf_meta_tag %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>

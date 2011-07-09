@@ -1,0 +1,65 @@
+<root>
+  <comment id="1">
+    Rails-like flash message.
+  </comment>
+  <comment id="2">
+    Ensures that flash message is only displayed once.
+  </comment>
+  <comment id="3">
+    Which view is displayed?
+  </comment>
+  <comment id="4">
+    Errors from server-side validations.
+  </comment>
+  <comment id="5">
+    All records (from index action).
+  </comment>
+  <comment id="6">
+    Currently selected record.
+  </comment>
+  <comment id="7">
+    tempItem. Copy of selectedItem in edit action. Also used in new action.
+  </comment>
+  <comment id="8">
+    Sets flash message. Reset shownOnce flag.
+  </comment>
+  <comment id="9">
+    Called first in all actions to ensure that flash message in only shown once.
+  </comment>
+  <comment id="10">
+    Resets all properties of tempItem.
+  </comment>
+  <comment id="11">
+    Copies properties from selectedItem to tempItem. Used in edit action.
+  </comment>
+  <comment id="12">
+    Index action. Fetches all records from the server and stores them in the items array.
+  </comment>
+  <comment id="13">
+    Show action. Displays selected item.
+  </comment>
+  <comment id="14">
+    New action. Displays form for new record.
+  </comment>
+  <comment id="15">
+    Edit action. Displays edit form.
+  </comment>
+  <comment id="16">
+    Create action, creates a new record in the Rails backend with a POST request.
+  </comment>
+  <comment id="17">
+    Wraps properties in a "post" property, easier to handle for Rails.
+  </comment>
+  <comment id="18">
+    Update action. Updates an existing record with a PUT request.
+  </comment>
+  <comment id="19">
+    Destroy action. Destroys an existing record with a DELETE request.
+  </comment>
+  <comment id="20">
+    Set up bindings and call index action.
+  </comment>
+
+
+
+</root>

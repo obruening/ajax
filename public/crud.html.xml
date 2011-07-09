@@ -1,0 +1,49 @@
+
+<root>
+  <comment id="1">
+    jQuery Template to display an element of the validation error array.
+  </comment>
+  <comment id="2">
+    jQuery Template for the index view.
+  </comment>
+  <comment id="3">
+    Data bindings for post columns.
+  </comment>
+  <comment id="4">
+    Click handler for actions. $data contains the object that was passed to the template.
+  </comment>
+  <comment id="5">
+    jQuery Template for the show view.
+  </comment>
+  <comment id="6">
+    Mimic Rails CRUD navigation.
+  </comment>
+  <comment id="7">
+    jQuery Template for the edit view.
+  </comment>
+  <comment id="8">
+    jQuery Template for the new view.
+  </comment>
+  <comment id="9">
+    Call error template for validation errors.
+  </comment>
+  <comment id="10">
+    Display flash message.
+  </comment>
+  <comment id="11">
+    Display/hide index view as a function of currentPage.
+  </comment>
+  <comment id="12">
+    Display/hide show view as a function of currentPage. selectedItem represents the currently selected record
+    and is part of the viewModel.
+  </comment>
+  <comment id="13">
+    Display/hide edit view as a function of currentPage. tempItem is a copy of selectedItem.
+    tempItem is necessary because user might cancel the edit. In this case, selectedItem is untouched.
+    selectedItem is passed to the template as an template option for the cancel link (see edit template).
+  </comment>
+  <comment id="14">
+    Display/hide new view as a function of currentPage. Also operates on tempItem.
+  </comment>
+
+</root>
